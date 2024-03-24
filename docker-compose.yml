@@ -8,8 +8,13 @@ services:
     network_mode: "bridge"
     environment:
       - SSH_ENABLE_ROOT=true
+    ports:
+    - "3000:3000"
+    - "2223:2223"
     volumes:
-    - ./secrets/id_rsa_container.pub
+    - ./secrets/id_rsa_container.pub:/root/.ssh/authorized_keys
+    networks:
+    - loadbalancing
   managedhost-app-2:
     build: 
       context: managed-host/alpine/app2
@@ -17,6 +22,13 @@ services:
     network_mode: "bridge"
     environment:
       - SSH_ENABLE_ROOT=true
+    ports:
+      - "3001:3000"
+      - "2224:2224"
+    volumes:
+    - ./secrets/id_rsa_container.pub:/root/.ssh/authorized_keys
+    networks:
+    - loadbalancing
   managedhost-app-3:
     build: 
       context: managed-host/alpine/app3
@@ -24,3 +36,10 @@ services:
     network_mode: "bridge"
     environment:
       - SSH_ENABLE_ROOT=true
+    ports:
+      - "3002:3000"
+      - "2225:2225"
+    volumes:
+    - ./secrets/id_rsa_container.pub:/root/.ssh/authorized_keys
+    networks:
+    - loadbalancing
